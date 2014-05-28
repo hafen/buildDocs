@@ -65,15 +65,15 @@ The strict start and end requirements are to do with not mistaking R comments wi
 
 You can also build a function reference thanks to staticdocs using the function `buildFunctionRef()`.
 
-Here is example usage for a project `datadr` with documents located in `/tmp/datadr-gh-pages/docs`:
+Here is example usage for a project `project` with documents located in `/tmp/project-gh-pages/docs`:
 
 ```s
 buildDocs(
-   docsLoc = "/tmp/datadr-gh-pages/docs",
-   outLoc = "/tmp/datadr-gh-pages/",
+   docsLoc = "/tmp/project-gh-pages/docs",
+   outLoc = "/tmp/project-gh-pages/",
    pageList = c("1intro.Rmd", "2data.Rmd"),
    navPill = packageNavPill("https://github.com/user/project"),
-   copyrightText = "Ryan Hafen",
+   copyrightText = "Somebody",
    editHref = "https://github.com/user/project/edit/gh-pages/docs/",
    knit = TRUE
 )
