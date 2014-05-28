@@ -1,0 +1,22 @@
+Package: buildDocs
+Type: Package
+Title: Build HTML Package Vignette / Function Ref Documents
+Version: 0.1
+Date: 2014-03-08
+Author: Ryan Hafen
+Maintainer: Ryan Hafen <ryan.hafen@pnnl.gov>
+Description: Build HTML Package Vignette / Function Ref Documents
+License: BSD_3_clause + file LICENSE
+LazyLoad: yes
+LazyData: yes
+Depends:
+    R (>= 2.15.1),
+    whisker,
+    markdown,
+    knitr,
+    digest,
+    tools,
+    devtools
+Suggests:
+    gsubfn,
+    staticdocs
