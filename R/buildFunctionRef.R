@@ -12,28 +12,29 @@ buildFunctionRef <- function(packageLoc, outLoc = NULL, navPill = "", copyrightT
    options(gsubfn.engine = "R")
    require(gsubfn)
    
-   examples <- FALSE
-   
    package_path <- packageLoc
    # temporarily create staticdocs directory
-   sdDir <- file.path(packageLoc, "staticdocs")
+   sdDir <- file.path(packageLoc, "inst/web")
    if(!file.exists(sdDir))
       dir.create(sdDir)
    
    devtools:::load_all(package_path)
-   package <- staticdocs:::package_info(packageLoc, tempdir(), examples)
+   # package <- staticdocs:::package_info(packageLoc, tempdir(), examples)
+   package <- as.sd_package(packageLoc, examples = FALSE)
    
-   pageTitle <- paste(package$package, " R function reference")
+   # build_site(packageLoc, examples = FALSE, templates_path = "~/Documents/Code/buildDocs/inst/templates")
+   
+   pageTitle <- paste(package$package, "R function reference")
    
    if(is.null(windowTitle))
       windowTitle <- pageTitle
    
-   if (!file.exists(package$base_path)) 
-      dir.create(package$base_path)
+   if(!file.exists(package$sd_path)) 
+      dir.create(package$sd_path)
    
    # build_topics
    index <- package$rd_index
-   paths <- file.path(package$base_path, index$file_out)
+   paths <- file.path(package$sd_path, index$file_out)
    index$title <- ""
    index$in_index <- TRUE
    sectionNames <- list()
@@ -55,17 +56,39 @@ buildFunctionRef <- function(packageLoc, outLoc = NULL, navPill = "", copyrightT
       rd <- package$rd[[i]]
       rdc <- sapply(rd, function(x) class(x)[1])
       exInd <- which(rdc == "examples")
-      html <- staticdocs:::to_html(rd, env = new.env(parent = globalenv()), topic = stringr:::str_replace(basename(paths[[i]]), "\\.html$", ""), package = package)
+      html <- staticdocs:::to_html(rd, 
+         env = new.env(parent = globalenv()), 
+         topic = stringr:::str_replace(basename(paths[[i]]), "\\.html$", ""), 
+         pkg = package)
       
       # need to extract examples separately (don't want to evaluate them and want them to not look like crap)
       # text <- to_html.TEXT(x[-1], ...)
       
       html$pagetitle <- html$name
-      html$package <- package[c("package", "version")]   
+      html$package <- package[c("package", "version")]
       # render_page
       name <- "topic"
       path <- paths[[i]]
       data <- html
+      
+      # description is in sections for some reason
+      descInd <- which(sapply(data$sections, function(a) {
+         if(!is.null(names(a))) {
+            if("title" %in% names(a)) {
+               if(a$title == "Description")
+                  return(TRUE)
+            }
+         }
+         FALSE
+      }))
+      if(length(descInd) > 0) {
+         data$description <- data$sections[[descInd]]$contents
+         data$sections[[descInd]] <- NULL
+      }
+      
+      zeroInd <- which(sapply(data$sections, length) == 0)
+      if(length(zeroInd) > 0)
+         data$sections <- data$sections[-zeroInd]
       
       rgxp <- "([a-zA-Z0-9\\.\\_]+)\\.html"
       
@@ -91,7 +114,7 @@ buildFunctionRef <- function(packageLoc, outLoc = NULL, navPill = "", copyrightT
          href = validID(data$name),
          item = data$name
       )
-      data2$href <- 
+      # data2$href <- 
       
       sectionNames[[i]] <- whisker.render(tocTemplate, data2)
       
