@@ -140,7 +140,7 @@ buildDocs <- function(docsLoc, outLoc = NULL, pageList = NULL, optTemplates = NU
       
       secInd <- which(grepl("^### (.*) ###$", b))
       secNames <- gsub("^### (.*) ###$", "\\1", b[secInd])
-      secID <- buildDocs:::validID(secNames)
+      secID <- validID(secNames)
       
       tmp <- paste(sprintf("
       <li class='active'>
