@@ -9,7 +9,7 @@
 #' @param docsLoc base directory of the .Rmd files
 #' @param outLoc base directory where output .html, assets, code, figures should go
 #' @param pageList optional vector of file paths to be included in the document build, in the order in which they are provided, relative to \code{docsLoc} - this is useful if they aren't already in order
-#' @param navPill HTML to go in the nav-pill (see \code{\link{packagePills}})
+#' @param optTemplates optional template content - list of named elements - currently \code{navpills} and \code{brand} (see \code{\link{packagePills}})
 #' @param editHref link to URL where the file can be edited (used with github)
 #' @param copyrightText text to go with copyright
 #' @param windowTitle optional title for the window
@@ -17,7 +17,7 @@
 #' @param knitr should the document be typeset?
 #' @param purl should code be pulled out and put in the code directory?
 #' @export
-buildDocs <- function(docsLoc, outLoc = NULL, pageList = NULL, navPill = "", editHref = "", copyrightText, windowTitle = NULL, root.dir = NULL, knit = TRUE, purl = TRUE) {
+buildDocs <- function(docsLoc, outLoc = NULL, pageList = NULL, optTemplates = NULL, editHref = "", copyrightText, windowTitle = NULL, root.dir = NULL, knit = TRUE, purl = TRUE) {
    
    if(is.null(outLoc))
       outLoc <- docsLoc
@@ -187,10 +187,9 @@ buildDocs <- function(docsLoc, outLoc = NULL, pageList = NULL, navPill = "", edi
    });
    </script>"
    
-   ll <- list(
+   ll <- c(list(
       title = windowTitle,
       extra_css = "",
-      navpills = navPill,
       header = pageTitle,
       side_span = "3",
       main_span = "9",
@@ -199,7 +198,7 @@ buildDocs <- function(docsLoc, outLoc = NULL, pageList = NULL, navPill = "", edi
       copyright = paste(copyrightText, ", ", format(Sys.time(), "%Y"), sep = ""),
       first_section = firstSection,
       extra_header = extraHeader
-   )
+   ), optTemplates)
    
    pageTemplate <- readLines(file.path(templatePath, "page_template.html"))
    

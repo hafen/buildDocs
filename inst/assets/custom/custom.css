@@ -2,7 +2,7 @@ body {
    font-family: "Lato","proxima-nova","Helvetica Neue",Arial,sans-serif;
    font-weight: normal;
    color: #404040;
-   font-size: 16px;
+   font-size: 18px;
    padding-bottom: 40px;
 }
 
@@ -46,6 +46,11 @@ code, pre {
 /*   font-size: 14px;*/
 }
 
+code {
+  padding: 2px 2px !important;
+  background-color: transparent !important;
+}
+
 pre {
    color: #777777 !important;
    font-size: 14px !important;
@@ -70,6 +75,17 @@ pre code {
    border-left: 3px solid #ccc !important;
 }
 */
+
+.navbar-brand {
+  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  text-transform: none !important;
+  font-weight: normal;
+  color: #000;
+  font-size: 32px !important;
+  padding-top: 11px;
+}
+.navbar-brand:after { content:"\203A"; }
+
 
 .nav-list > li > a {
    padding: 5px 10px;

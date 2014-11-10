@@ -4,11 +4,11 @@
 #' 
 #' @param packageLoc base directory of the R package
 #' @param outLoc base directory where output .html, assets, code, figures should go
-#' @param navPill HTML to go in the nav-pill (see \code{\link{packagePills}})
+#' @param optTemplates optional template content - list of named elements - currently \code{navpills} and \code{brand} (see \code{\link{packagePills}})
 #' @param copyrightText text to go with copyright
 #' @param windowTitle optional title for the window
 #' @export
-buildFunctionRef <- function(packageLoc, outLoc = NULL, navPill = "", copyrightText, windowTitle = NULL) {
+buildFunctionRef <- function(packageLoc, outLoc = NULL, optTemplates = NULL, copyrightText, windowTitle = NULL) {
    options(gsubfn.engine = "R")
    require(gsubfn)
    
@@ -144,10 +144,9 @@ buildFunctionRef <- function(packageLoc, outLoc = NULL, navPill = "", copyrightT
       paste(sectionNames, collapse = "\n")
    )
    
-   ll <- list(
+   ll <- c(list(
       title = windowTitle,
       extra_css = "",
-      navpills = navPill,
       header = pageTitle,
       side_span = "3",
       main_span = "9",
@@ -156,7 +155,7 @@ buildFunctionRef <- function(packageLoc, outLoc = NULL, navPill = "", copyrightT
       copyright = paste(copyrightText, ", ", format(Sys.time(), "%Y"), sep = ""),
       first_section = "packagemain",
       extra_header = ""
-   )
+   ), optTemplates)
    
    pageTemplate <- readLines(file.path(templatePath, "page_template.html"))
    
